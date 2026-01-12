@@ -4,6 +4,7 @@ import { lazy } from "react";
 import HomePage from "@/pages/Home";
 import DefaultLayout from "@/layouts/default.tsx";
 import AdminLayout from "@/layouts/adminLayout.tsx";
+import Auth from "@/components/auth";
 
 const DocsPage = lazy(() => import("@/pages/Docs/index.tsx"));
 const PricingPage = lazy(() => import("@/pages/Pricing/index.tsx"));
@@ -19,7 +20,7 @@ export const routes: RouteObject[] = [
     element: <DefaultLayout />,
     children: [
       {
-        path: "/",
+        path: "",
         element: <HomePage />,
       },
       {
@@ -41,8 +42,25 @@ export const routes: RouteObject[] = [
     ],
   },
   {
+    path: "/auth",
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Navigate to="/auth/login" />,
+      },
+    ],
+  },
+  {
     path: "/admin",
-    element: <AdminLayout />,
+    element: (
+      <Auth>
+        <AdminLayout />
+      </Auth>
+    ),
     children: [
       {
         path: "",
@@ -75,10 +93,6 @@ export const routes: RouteObject[] = [
       {
         path: "setting",
         element: <h1>系统设置</h1>,
-      },
-      {
-        path: "login",
-        element: <Login />,
       },
       {
         path: "*",

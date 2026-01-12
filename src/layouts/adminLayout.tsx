@@ -11,7 +11,7 @@ import {
 
 import { CircularMenu } from "@/components/CircularMenu";
 
-export const AdminLayout = () => {
+const AdminLayout = () => {
   const MENU_ITEMS = [
     { key: "dashboard", label: "控制台", icon: LayoutDashboard },
     { key: "article", label: "文章", icon: Newspaper },
