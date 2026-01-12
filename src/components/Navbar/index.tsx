@@ -17,7 +17,7 @@ import { Image } from "@heroui/image";
 import { useNavigate } from "react-router-dom";
 import { startTransition } from "react";
 import { HiMiniSquares2X2 } from "react-icons/hi2";
-import {addToast, closeAll} from "@heroui/toast";
+import { addToast, closeAll } from "@heroui/toast";
 
 import { siteConfig } from "@/config/site.ts";
 import {
