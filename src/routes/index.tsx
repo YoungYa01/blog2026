@@ -11,7 +11,8 @@ const PricingPage = lazy(() => import("@/pages/Pricing/index.tsx"));
 const BlogPage = lazy(() => import("@/pages/Blog/index.tsx"));
 const AboutPage = lazy(() => import("@/pages/About/index.tsx"));
 const AdminPage = lazy(() => import("@/pages/Admin/index.tsx"));
-const Login = lazy(() => import("@/pages/Admin/Login/index.tsx"));
+const Login = lazy(() => import("@/pages/Auth/Login/index.tsx"));
+const Register = lazy(() => import("@/pages/Auth/Register/index.tsx"));
 
 // 定义路由表
 export const routes: RouteObject[] = [
@@ -49,8 +50,8 @@ export const routes: RouteObject[] = [
         element: <Login />,
       },
       {
-        path: "register",
-        element: <Navigate to="/auth/login" />,
+        path: "signup",
+        element: <Register />,
       },
     ],
   },
