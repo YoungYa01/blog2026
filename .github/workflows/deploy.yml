@@ -45,7 +45,7 @@ jobs:
         run: |
           rsync -avz --progress --delete \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            doc_build/ \
+            dist/ \
             ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.DEPLOY_TARGET }}
 
       - name: Verify deployment
