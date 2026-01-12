@@ -163,7 +163,7 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
                     <motion.span
                       key={activeIndex || "default"}
                       animate={{ opacity: 1, y: 0 }}
-                      className="text-xs font-bold tracking-widest uppercase text-foreground/80"
+                      className="text-medium font-bold tracking-widest uppercase text-foreground/80"
                       exit={{ opacity: 0, y: -5 }}
                       initial={{ opacity: 0, y: 5 }}
                     >

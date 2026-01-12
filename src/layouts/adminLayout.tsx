@@ -1,24 +1,25 @@
 import { Outlet } from "react-router-dom";
 import {
-  BarChart3,
+  BookImage,
   LayoutDashboard,
-  MessageSquare,
+  Newspaper,
   Settings,
-  ShoppingCart,
+  Shapes,
+  Tag,
   Users,
 } from "lucide-react";
 
 import { CircularMenu } from "@/components/CircularMenu";
 
 export const AdminLayout = () => {
-  // --- 菜单配置 ---
   const MENU_ITEMS = [
     { key: "dashboard", label: "控制台", icon: LayoutDashboard },
-    { key: "users", label: "用户管理", icon: Users },
-    { key: "analytics", label: "数据分析", icon: BarChart3 },
-    { key: "orders", label: "订单列表", icon: ShoppingCart },
-    { key: "messages", label: "消息中心", icon: MessageSquare },
-    { key: "settings", label: "系统设置", icon: Settings },
+    { key: "article", label: "文章", icon: Newspaper },
+    { key: "tag", label: "标签", icon: Tag },
+    { key: "category", label: "分类", icon: Shapes },
+    { key: "album", label: "图集", icon: BookImage },
+    { key: "user", label: "个人中心", icon: Users },
+    { key: "setting", label: "系统设置", icon: Settings },
   ];
 
   return (
