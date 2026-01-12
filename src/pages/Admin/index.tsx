@@ -10,7 +10,6 @@ export default function AdminPage() {
     const channel = new BroadcastChannel(CHANNEL_SEND_KEY);
 
     channel.onmessage = (event) => {
-      console.log("receive", event.data);
       if (event.data === CHANNEL_SEND_KEY) {
         setChannel(event.data);
         channel.postMessage(CHANNEL_RECEIVE_KEY);

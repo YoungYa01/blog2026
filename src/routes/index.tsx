@@ -1,4 +1,4 @@
-import { RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
 import { lazy } from "react";
 
 import HomePage from "@/pages/Home";
@@ -10,6 +10,7 @@ const PricingPage = lazy(() => import("@/pages/Pricing/index.tsx"));
 const BlogPage = lazy(() => import("@/pages/Blog/index.tsx"));
 const AboutPage = lazy(() => import("@/pages/About/index.tsx"));
 const AdminPage = lazy(() => import("@/pages/Admin/index.tsx"));
+const Login = lazy(() => import("@/pages/Admin/Login/index.tsx"));
 
 // 定义路由表
 export const routes: RouteObject[] = [
@@ -22,19 +23,19 @@ export const routes: RouteObject[] = [
         element: <HomePage />,
       },
       {
-        path: "/docs",
+        path: "docs",
         element: <DocsPage />,
       },
       {
-        path: "/pricing",
+        path: "pricing",
         element: <PricingPage />,
       },
       {
-        path: "/blog",
+        path: "blog",
         element: <BlogPage />,
       },
       {
-        path: "/about",
+        path: "about",
         element: <AboutPage />,
       },
     ],
@@ -45,8 +46,48 @@ export const routes: RouteObject[] = [
     children: [
       {
         path: "",
+        element: <Navigate to="/admin/dashboard" />,
+      },
+      {
+        path: "dashboard",
         element: <AdminPage />,
       },
+      {
+        path: "article",
+        element: <h1>文章</h1>,
+      },
+      {
+        path: "tag",
+        element: <h1>标签</h1>,
+      },
+      {
+        path: "category",
+        element: <h1>分类</h1>,
+      },
+      {
+        path: "album",
+        element: <h1>图集</h1>,
+      },
+      {
+        path: "user",
+        element: <h1>个人中心</h1>,
+      },
+      {
+        path: "setting",
+        element: <h1>系统设置</h1>,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "*",
+        element: <Navigate to="/admin/dashboard" />,
+      },
     ],
+  },
+  {
+    path: "*",
+    element: <Navigate to="/" />,
   },
 ];
