@@ -17,6 +17,12 @@ const ArticleManager = lazy(
   () => import("@/pages/Admin/ArticleManager/index.tsx"),
 );
 const AlbumManager = lazy(() => import("@/pages/Admin/AlbumManager/index.tsx"));
+const ProfileManager = lazy(
+  () => import("@/pages/Admin/ProfileManager/index.tsx"),
+);
+const CategoryManager = lazy(
+  () => import("@/pages/Admin/CategoryManager/index.tsx"),
+);
 
 // 定义路由表
 export const routes: RouteObject[] = [
@@ -85,7 +91,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: "category",
-        element: <h1>分类</h1>,
+        element: <CategoryManager/>,
       },
       {
         path: "album",
@@ -93,7 +99,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: "user",
-        element: <h1>个人中心</h1>,
+        element: <ProfileManager />,
       },
       {
         path: "setting",
