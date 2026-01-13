@@ -210,7 +210,7 @@ const PhotoEditorModal = ({
   onSubmit: (data: Photo | DraftPhoto) => Promise<void>;
 }) => {
   // 本地状态
-  const [formData, setFormData] = useState<Photo | DraftPhoto>(photo);
+    const [formData, setFormData] = useState<Photo | DraftPhoto | null>(photo);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -218,19 +218,26 @@ const PhotoEditorModal = ({
   // 如果是新文件，自动读取一些元数据（模拟）
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
+      if (!photo) return;
     setFormData(photo);
-    if ((photo as DraftPhoto).isNew) {
-      // 这里可以做一些自动填充，比如从文件名获取标题
-      setFormData((prev) => ({
-        ...prev,
-        title:
-          prev.title || (prev as DraftPhoto).file?.name.split(".")[0] || "",
-        metadata: { camera: "Unknown", iso: "-", aperture: "-" } as any,
-      }));
-    }
+      if ((photo as DraftPhoto).isNew) {
+          setFormData((prev) => {
+              if (!prev) return prev; //同样保护 prev
+              return {
+                  ...prev,
+                  title:
+                      prev.title || (prev as DraftPhoto).file?.name.split(".")[0] || "",
+                  metadata: { camera: "Unknown", iso: "-", aperture: "-" } as any,
+              };
+          });
+      }
   }, [photo]);
 
+    if (!photo || !formData) return null;
+
   const handleSubmit = async () => {
+      if (!formData) return;
+
     setIsSubmitting(true);
     setUploadProgress(10);
 
