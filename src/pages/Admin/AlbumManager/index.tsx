@@ -174,7 +174,10 @@ const UploadZone = ({
           handleFiles(e.dataTransfer.files);
         }}
       >
-        <div className="w-16 h-16 rounded-full bg-content1/50 flex items-center justify-center mb-4 group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors">
+        <div
+          className="w-16 h-16 rounded-full bg-content1/50 flex items-center justify-center
+         mb-4 group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors"
+        >
           <UploadCloud size={32} />
         </div>
         <h3 className="text-lg font-bold text-foreground">
