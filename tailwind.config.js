@@ -233,5 +233,6 @@ module.exports = {
                 "disabledOpacity": "0.4"
             }
         }),
+        require("@tailwindcss/typography"),
     ],
 };
