@@ -82,11 +82,8 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
   const handleClose = () => {
     setIsOpen(false);
     setActiveIndex(null);
-    // 重置旋转状态，防止下次打开时乱转
-    setTimeout(() => {
-      rotationValue.set(0);
-      currentRotationRef.current = 0;
-    }, 300);
+    rotationValue.set(0);
+    currentRotationRef.current = 0;
   };
 
   return (
@@ -142,7 +139,7 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
                 {/* --- 视觉层 2: 动态选中扇区 (Highlighter) --- */}
                 {/* 这个层跟随 rotationValue 旋转，实现无缝衔接 */}
                 <motion.div
-                  className="absolute inset-0 z-0"
+                  className="absolute inset-0 z-0  cursor-grab active:cursor-grabbing"
                   style={{ rotate: rotationValue }}
                 >
                   {/* 扇形高亮：使用 conic-gradient 实现更柔和的扇形光束 */}
@@ -186,14 +183,15 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
                   return (
                     <motion.button
                       key={item.key}
-                      className={`absolute z-20 transition-all duration-200 flex flex-col items-center justify-center ${
+                      className={`absolute z-20 transition-all duration-200 flex flex-col items-center justify-center 
+                      cursor-grab active:cursor-grabbing
+                      ${
                         isActive
                           ? "text-primary scale-110 drop-shadow-[0_0_8px_rgba(var(--heroui-primary),0.5)]"
                           : "text-default-400"
                       }`}
                       style={{ x, y }}
                       onClick={() => {
-                        console.log("Nav to", item.key);
                         navigate(item.key);
                         handleClose();
                       }}
@@ -213,7 +211,7 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
             layout
             className={`
                     w-16 h-16 rounded-full flex items-center justify-center shadow-2xl border-2
-                    transition-colors duration-300
+                    transition-colors duration-300 cursor-pointer
                     ${
                       isOpen
                         ? "bg-default-100 border-default-200 text-default-900"
