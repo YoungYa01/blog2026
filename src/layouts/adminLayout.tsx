@@ -3,7 +3,6 @@ import {
   BookImage,
   LayoutDashboard,
   Newspaper,
-  Settings,
   Shapes,
   Tag,
   Users,
@@ -19,7 +18,7 @@ const AdminLayout = () => {
     { key: "category", label: "分类", icon: Shapes },
     { key: "album", label: "图集", icon: BookImage },
     { key: "user", label: "个人中心", icon: Users },
-    { key: "setting", label: "系统设置", icon: Settings },
+    // { key: "setting", label: "系统设置", icon: Settings },
   ];
 
   return (
