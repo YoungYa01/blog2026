@@ -11,9 +11,11 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { Input } from "@heroui/input";
-import { Slider } from "@heroui/slider";
 import { Button } from "@heroui/button";
 import { useNavigate } from "react-router-dom";
+import { addToast, closeAll } from "@heroui/toast";
+
+import { getAllSchemaMessage, registerSchema } from "@/utils/schemaVerify.ts";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -52,11 +54,22 @@ const Register = () => {
 
   const handleRegister = async () => {
     setIsLoading(true);
-    console.log("Submitting Data:", formData);
+    const { success, error } = registerSchema.safeParse(formData);
+
+    if (!success) {
+      closeAll();
+      addToast({
+        description: getAllSchemaMessage(String(error)),
+        color: "danger",
+      });
+      setIsLoading(false);
+
+      return;
+    }
     // 模拟数据写入过程
     await new Promise((resolve) => setTimeout(resolve, 2500));
     setIsLoading(false);
-    alert("档案建立成功 / Profile Created");
+    navigate("/auth/login");
   };
 
   // 根据聚焦字段返回核心颜色和图标
@@ -168,8 +181,9 @@ const Register = () => {
                         "bg-white/5 border-white/10 group-data-[focus=true]:border-cyan-400/50 h-12",
                       label: "text-default-400 text-xs",
                     }}
-                    label="Codename"
-                    placeholder="Enter Name"
+                    label="名字"
+                    maxLength={20}
+                    minLength={2}
                     startContent={
                       <User className="text-default-400" size={16} />
                     }
@@ -186,10 +200,9 @@ const Register = () => {
                         "bg-white/5 border-white/10 group-data-[focus=true]:border-emerald-400/50 h-12",
                       label: "text-default-400 text-xs",
                     }}
-                    label="Cycle"
+                    label="年龄"
                     max={150}
                     min={1}
-                    placeholder="150"
                     type="number"
                     value={formData.age.toString()}
                     variant="bordered"
@@ -200,42 +213,13 @@ const Register = () => {
                   />
                 </div>
               </div>
-
-              {/* Age Slider (Visual Feedback) */}
-              <div className="px-1 py-1">
-                <div className="flex justify-between text-[10px] text-default-400 font-mono mb-1">
-                  <span>BIOLOGICAL AGE</span>
-                  <span>{formData.age} / 150</span>
-                </div>
-                <Slider
-                  aria-label="Age"
-                  className="max-w-full"
-                  classNames={{
-                    track: "bg-white/10 h-1",
-                    thumb:
-                      "bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)] w-4 h-4 after:bg-emerald-400",
-                  }}
-                  color="success"
-                  maxValue={150}
-                  minValue={1}
-                  size="sm"
-                  step={1}
-                  value={formData.age}
-                  onChange={(v) => {
-                    setFormData({ ...formData, age: Number(v) });
-                    setFocusedField("age");
-                  }}
-                />
-              </div>
-
               <Input
                 classNames={{
                   inputWrapper:
                     "bg-white/5 border-white/10 group-data-[focus=true]:border-amber-400/50 h-12",
                   label: "text-default-400 text-xs",
                 }}
-                label="Comms Link"
-                placeholder="user@grid.net"
+                label="邮箱"
                 startContent={<Mail className="text-default-400" size={16} />}
                 value={formData.email}
                 variant="bordered"
@@ -249,8 +233,7 @@ const Register = () => {
                     "bg-white/5 border-white/10 group-data-[focus=true]:border-rose-500/50 h-12",
                   label: "text-default-400 text-xs",
                 }}
-                label="Security Key"
-                placeholder="••••••••••••"
+                label="密码"
                 startContent={<Lock className="text-default-400" size={16} />}
                 type="password"
                 value={formData.password}

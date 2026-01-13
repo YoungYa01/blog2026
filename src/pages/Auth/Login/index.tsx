@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { User, Lock, Fingerprint, ScanEye, ArrowRight } from "lucide-react";
+import {
+  Lock,
+  Fingerprint,
+  ScanEye,
+  ArrowRight,
+  Mail,
+  KeyRound,
+} from "lucide-react";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { useNavigate } from "react-router-dom";
-import {z} from "zod";
 
-const emailSchema = z.object({ email: z.string().email() });
+import { emailSchema, passwordSchema } from "@/utils/schemaVerify.ts";
+import { getToken, setToken } from "@/utils/localstorage.ts";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -54,8 +61,17 @@ const Login = () => {
     // 模拟登录延迟
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
-    alert("身份验证通过 / Access Granted");
+    setToken("test token");
+    navigate("/admin/dashboard");
   };
+
+  useEffect(() => {
+    const token = getToken();
+
+    if (token) {
+      navigate("/admin/dashboard");
+    }
+  }, []);
 
   return (
     <div
@@ -153,10 +169,10 @@ const Login = () => {
                   label: "text-default-400",
                 }}
                 errorMessage="请输入正确的邮箱"
-                isInvalid={emailSchema.safeParse(email).success}
+                isInvalid={!emailSchema.safeParse(email).success}
                 label="Email"
                 startContent={
-                  <User
+                  <Mail
                     className="text-default-400 pointer-events-none"
                     size={18}
                   />
@@ -174,9 +190,16 @@ const Login = () => {
                   inputWrapper:
                     "bg-black/20 border-white/10 group-data-[focus=true]:border-danger/50 group-data-[focus=true]:bg-black/40 h-14",
                 }}
+                errorMessage={
+                  JSON.parse(
+                    (passwordSchema.safeParse(password).error
+                      ?.message as string) || "{}",
+                  )?.[0]?.message ?? ""
+                }
+                isInvalid={!passwordSchema.safeParse(password).success}
                 label="Password"
                 startContent={
-                  <Lock
+                  <KeyRound
                     className="text-default-400 pointer-events-none"
                     size={18}
                   />
