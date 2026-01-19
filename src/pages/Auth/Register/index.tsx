@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import {
   User,
@@ -9,6 +9,8 @@ import {
   ArrowRight,
   FileBadge,
   ShieldCheck,
+  Key, // 新增图标
+  Timer,
 } from "lucide-react";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
@@ -16,25 +18,85 @@ import { useNavigate } from "react-router-dom";
 import { addToast, closeAll } from "@heroui/toast";
 
 import { getAllSchemaMessage, registerSchema } from "@/utils/schemaVerify.ts";
+import { register, sendCaptchaEmail } from "@/api/auth.ts";
+import { RegisterModel } from "@/types/models/auth.ts";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<RegisterModel>({
     name: "",
     age: 18,
     email: "",
     password: "",
+    captcha: "", // 这里的 captcha 如果指的是图片验证码，保留；如果是指邮箱验证码，可以复用
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
-  // --- 3D 视差逻辑 (复用登录页，保持统一感) ---
+  // --- 验证码倒计时逻辑 ---
+  const [countdown, setCountdown] = useState(0);
+  const [isSendingCode, setIsSendingCode] = useState(false);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (countdown > 0) {
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
+
+    return () => clearTimeout(timer);
+  }, [countdown]);
+
+  const handleSendCode = async () => {
+    // 简单的邮箱校验
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.email || !emailRegex.test(formData.email)) {
+      addToast({
+        description: "请输入有效的邮箱地址",
+        color: "warning",
+      });
+
+      return;
+    }
+
+    setIsSendingCode(true);
+    try {
+      const { success, error, message } = await sendCaptchaEmail({
+        email: formData.email,
+      });
+
+      if (!success) {
+        addToast({
+          description: message || error,
+          color: "danger",
+        });
+
+        return;
+      }
+
+      addToast({
+        description: "验证码已发送至您的邮箱",
+        color: "success",
+      });
+      setCountdown(60);
+    } catch (err) {
+      addToast({
+        description: "发送失败，请稍后重试",
+        color: "danger",
+      });
+    } finally {
+      setIsSendingCode(false);
+    }
+  };
+
+  // --- 3D 视差逻辑 ---
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const mouseXSpring = useSpring(x);
   const mouseYSpring = useSpring(y);
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]); // 稍微减小角度，因为表单更长
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -54,6 +116,14 @@ const Register = () => {
 
   const handleRegister = async () => {
     setIsLoading(true);
+
+    if (!formData.captcha || formData.captcha.length < 6) {
+      addToast({ description: "请输入正确的验证码", color: "danger" });
+      setIsLoading(false);
+
+      return;
+    }
+
     const { success, error } = registerSchema.safeParse(formData);
 
     if (!success) {
@@ -66,10 +136,21 @@ const Register = () => {
 
       return;
     }
-    // 模拟数据写入过程
-    await new Promise((resolve) => setTimeout(resolve, 2500));
-    setIsLoading(false);
-    navigate("/auth/login");
+
+    try {
+      await register(formData);
+
+      addToast({ title: "注册成功", color: "success" });
+      navigate("/auth/login");
+    } catch (err) {
+      addToast({
+        title: "注册失败",
+        description: (err as { message: string }).message,
+        color: "danger",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // 根据聚焦字段返回核心颜色和图标
@@ -92,6 +173,12 @@ const Register = () => {
           color: "border-amber-400 bg-amber-400/20",
           icon: <Mail className="text-amber-400 w-8 h-8" />,
           glow: "shadow-amber-400/50",
+        };
+      case "captcha": // 新增验证码的状态颜色 (紫色)
+        return {
+          color: "border-violet-500 bg-violet-500/20",
+          icon: <Key className="text-violet-500 w-8 h-8" />,
+          glow: "shadow-violet-500/50",
         };
       case "password":
         return {
@@ -116,7 +203,7 @@ const Register = () => {
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
     >
-      {/* 背景层 */}
+      {/* 背景层 (保持不变) */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px]" />
         <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[100px] opacity-20 animate-pulse" />
@@ -213,6 +300,8 @@ const Register = () => {
                   />
                 </div>
               </div>
+
+              {/* Email Row */}
               <Input
                 classNames={{
                   inputWrapper:
@@ -227,6 +316,46 @@ const Register = () => {
                 onValueChange={(v) => setFormData({ ...formData, email: v })}
               />
 
+              <Input
+                classNames={{
+                  inputWrapper:
+                    "bg-white/5 border-white/10 group-data-[focus=true]:border-violet-500/50 h-12 pr-1",
+                  label: "text-default-400 text-xs",
+                }}
+                endContent={
+                  <Button
+                    className={`
+                      min-w-[100px] h-8 font-mono text-xs
+                      ${
+                        countdown > 0
+                          ? "bg-default-100 text-default-400"
+                          : "bg-violet-500/20 text-violet-400 hover:bg-violet-500 hover:text-white border border-violet-500/50"
+                      }
+                    `}
+                    disabled={countdown > 0 || isSendingCode}
+                    isLoading={isSendingCode}
+                    size="sm"
+                    onPress={handleSendCode}
+                  >
+                    {countdown > 0 ? (
+                      <span className="flex items-center gap-1">
+                        <Timer size={12} /> {countdown}s
+                      </span>
+                    ) : (
+                      "SEND CAPTCHA"
+                    )}
+                  </Button>
+                }
+                label="验证码"
+                placeholder="输入6位验证码"
+                startContent={<Key className="text-default-400" size={16} />}
+                value={formData.captcha}
+                variant="bordered"
+                onFocus={() => setFocusedField("captcha")}
+                onValueChange={(v) => setFormData({ ...formData, captcha: v })}
+              />
+
+              {/* Password Row */}
               <Input
                 classNames={{
                   inputWrapper:
@@ -279,7 +408,7 @@ const Register = () => {
             </div>
           </div>
 
-          {/* 装饰性数据流背景 */}
+          {/* 装饰性数据流背景 (保持不变) */}
           <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
             <div className="flex flex-col gap-1 items-end text-[8px] font-mono text-cyan-500">
               {Array.from({ length: 8 }).map((_, i) => (
