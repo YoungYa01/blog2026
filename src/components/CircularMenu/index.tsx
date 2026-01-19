@@ -186,7 +186,7 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
                         navigate(item.key);
                         // 这里可以不用手动调用 handleClose 了，因为 useEffect 会监听路由变化自动关闭
                         // 但保留它会让交互感觉更“跟手”（反应更快）
-                        handleClose();
+                        // handleClose();
                       }}
                     >
                       <item.icon size={26} strokeWidth={isActive ? 2.5 : 2} />
