@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react"; // 引入 useEffect
 import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { X } from "lucide-react";
 import { Tooltip } from "@heroui/tooltip";
 import { HiOutlineSquares2X2 } from "react-icons/hi2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // 引入 useLocation
 
 export type MenuItem = {
   key: string;
@@ -24,12 +24,31 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  // --- 新增: 获取当前路由位置 ---
+  const location = useLocation();
+
   const rotationValue = useSpring(0, {
     stiffness: 150,
     damping: 20,
     mass: 0.8,
   });
   const currentRotationRef = useRef(0);
+
+  // 抽离关闭逻辑，方便复用
+  const handleClose = () => {
+    setIsOpen(false);
+    setActiveIndex(null);
+    rotationValue.set(0);
+    currentRotationRef.current = 0;
+  };
+
+  // --- 新增: 监听路由变化，自动关闭菜单 ---
+  useEffect(() => {
+    // 只要路径发生变化，就强制关闭菜单
+    if (isOpen) {
+      handleClose();
+    }
+  }, [location.pathname]); // 依赖项是路径
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isOpen || !menuRef.current) return;
@@ -40,35 +59,24 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
     const dx = e.clientX - centerX;
     const dy = e.clientY - centerY;
 
-    // 1. 计算角度 (0 - 360)
     let angle = Math.atan2(dy, dx) * (180 / Math.PI);
 
     angle = angle + 90;
     if (angle < 0) angle += 360;
 
-    // 2. 计算扇区索引
     const sectorAngle = 360 / props.menuItems.length;
     const index = Math.floor(angle / sectorAngle) % props.menuItems.length;
-
-    // 3. 距离检测 (空心圆环区域有效)
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    // 只有在圆环区域内才触发 (Radius ~ InnerRadius)
     if (distance > INNER_RADIUS && distance < RADIUS + 20) {
       if (activeIndex !== index) {
         setActiveIndex(index);
-
-        // --- 核心算法: 计算最短旋转路径 ---
         const targetAngle = index * sectorAngle;
         const currentAngle = currentRotationRef.current;
-
-        // 计算差值 (-180 到 180 之间)
         let delta = targetAngle - (currentAngle % 360);
 
         if (delta > 180) delta -= 360;
         if (delta < -180) delta += 360;
-
-        // 累加角度，而不是重置角度
         const nextRotation = currentAngle + delta;
 
         rotationValue.set(nextRotation);
@@ -79,16 +87,8 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
     }
   };
 
-  const handleClose = () => {
-    setIsOpen(false);
-    setActiveIndex(null);
-    rotationValue.set(0);
-    currentRotationRef.current = 0;
-  };
-
   return (
     <>
-      {/* 遮罩层 */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -102,7 +102,6 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
         )}
       </AnimatePresence>
 
-      {/* 触发器与菜单容器 */}
       <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center">
         <AnimatePresence>
           {isOpen && (
@@ -124,8 +123,6 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
                 transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* --- 视觉层 1: 毛玻璃圆盘底座 --- */}
-                {/* 使用 mask-image 实现边缘虚化过度 */}
                 <div
                   className="absolute inset-0 rounded-full bg-content1/80 backdrop-blur-2xl border border-white/10 shadow-2xl"
                   style={{
@@ -136,25 +133,21 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
                   }}
                 />
 
-                {/* --- 视觉层 2: 动态选中扇区 (Highlighter) --- */}
-                {/* 这个层跟随 rotationValue 旋转，实现无缝衔接 */}
                 <motion.div
-                  className="absolute inset-0 z-0  cursor-grab active:cursor-grabbing"
+                  className="absolute inset-0 z-0 cursor-grab active:cursor-grabbing"
                   style={{ rotate: rotationValue }}
                 >
-                  {/* 扇形高亮：使用 conic-gradient 实现更柔和的扇形光束 */}
                   <div
                     className="w-full h-full rounded-full opacity-0 transition-opacity duration-300"
                     style={{
                       opacity: activeIndex !== null ? 1 : 0,
                       background: `conic-gradient(from -30deg at 50% 50%, transparent 0deg, var(--heroui-primary) 30deg, transparent 60deg)`,
-                      filter: "blur(15px)", // 增加模糊让光束更柔和
-                      transform: "scale(1.1)", // 稍微放大一点让光溢出
+                      filter: "blur(15px)",
+                      transform: "scale(1.1)",
                     }}
                   />
                 </motion.div>
 
-                {/* --- 视觉层 3: 中心镂空装饰 --- */}
                 <div className="absolute w-24 h-24 rounded-full bg-background/50 backdrop-blur-md border border-white/5 shadow-inner z-10 flex items-center justify-center">
                   <AnimatePresence mode="wait">
                     <motion.span
@@ -171,11 +164,9 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
                   </AnimatePresence>
                 </div>
 
-                {/* --- 交互层: 图标 --- */}
                 {props.menuItems.map((item, index) => {
                   const angle = index * (360 / props.menuItems.length) - 90;
                   const radian = (angle * Math.PI) / 180;
-                  // 稍微调整图标位置，使其位于虚化边缘的内侧安全区
                   const x = Math.cos(radian) * (RADIUS - 45);
                   const y = Math.sin(radian) * (RADIUS - 45);
                   const isActive = activeIndex === index;
@@ -193,6 +184,8 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
                       style={{ x, y }}
                       onClick={() => {
                         navigate(item.key);
+                        // 这里可以不用手动调用 handleClose 了，因为 useEffect 会监听路由变化自动关闭
+                        // 但保留它会让交互感觉更“跟手”（反应更快）
                         handleClose();
                       }}
                     >
@@ -205,7 +198,6 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
           )}
         </AnimatePresence>
 
-        {/* 底部触发按钮 */}
         <Tooltip content="系统导航" offset={20}>
           <motion.button
             layout
@@ -226,7 +218,6 @@ export const CircularMenu: React.FC<CircularMenuProps> = (props) => {
               animate={{ rotate: isOpen ? 90 : 0 }}
               transition={{ type: "spring", stiffness: 200, damping: 20 }}
             >
-              {/*{isOpen ? <X size={28} /> : <Disc size={28} />}*/}
               {isOpen ? (
                 <X color={"#d41821"} size={28} />
               ) : (
