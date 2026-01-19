@@ -19,7 +19,7 @@ export default function Auth({ children }: Props) {
     if (token && !user) {
       fetchUserInfo();
     }
-  }, [fetchUserInfo, token, user]);
+  }, [token, user]);
 
   // 2. 定时心跳（可选优化）：每5分钟静默刷新一次用户信息
   useEffect(() => {
