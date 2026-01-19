@@ -11,9 +11,11 @@ import {
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { useNavigate } from "react-router-dom";
+import { addToast } from "@heroui/toast";
 
 import { emailSchema, passwordSchema } from "@/utils/schemaVerify.ts";
 import { getToken, setToken } from "@/utils/localstorage.ts";
+import { login } from "@/api/auth.ts";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -58,11 +60,25 @@ const Login = () => {
 
   const handleLogin = async () => {
     setIsLoading(true);
-    // 模拟登录延迟
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    setToken("test token");
-    navigate("/admin/dashboard");
+    try {
+      const { success, data } = await login({
+        email,
+        password,
+      });
+
+      if (success) {
+        setToken(data.access_token);
+        navigate("/admin/dashboard");
+      }
+    } catch (e: any) {
+      addToast({
+        title: "登录失败",
+        description: e.error,
+        color: "danger",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
