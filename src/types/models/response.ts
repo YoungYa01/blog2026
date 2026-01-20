@@ -6,11 +6,11 @@ export type Response<T = any> = {
 };
 
 export type PaginationModel = {
-  page: number;
-  page_seize: number;
-  total: number;
-  keyword: string;
-  sort: string;
+  page?: number;
+  page_size?: number;
+  total?: number;
+  keyword?: string;
+  sort?: string;
 };
 
 export type PaginationResponse<T = any> = {
