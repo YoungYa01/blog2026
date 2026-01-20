@@ -1,6 +1,6 @@
 export type ArticleModel = {
   id: number;
-    uuid: string;
+  uuid: string;
   title: string;
   content: string;
   excerpt: string;
@@ -14,7 +14,7 @@ export type ArticleModel = {
 
 export type ImageModel = {
   id: number;
-    uuid: string;
+  uuid: string;
   file_name: string;
   path: string;
   size: number;
