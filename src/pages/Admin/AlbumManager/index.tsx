@@ -451,16 +451,13 @@ export const AlbumManager = () => {
   }, [hasMore, page]); // ✅ 移除 loading 依赖，避免 Observer 闪烁
 
   // --- 交互: 删除图片 ---
-  const handleDelete = async (e: React.MouseEvent, uid: string) => {
-    e.stopPropagation();
-    if (!window.confirm("Confirm deletion of this visual record?")) return;
-
+  const handleDelete = async (uid: string) => {
     try {
       const { success } = await deletePhoto(uid);
 
       if (success) {
         setPhotos((prev) => prev.filter((p) => p.id !== uid));
-        addToast({ title: "Deleted", color: "success" });
+        addToast({ title: "Delete Success", color: "success" });
       }
     } catch (err) {
       addToast({ title: "Delete Failed", color: "danger" });
@@ -577,7 +574,7 @@ export const AlbumManager = () => {
                 key={photo.id}
                 photo={photo}
                 onClick={() => handlePhotoClick(photo)}
-                onDelete={(e) => handleDelete(e, photo.id)}
+                onDelete={() => handleDelete(photo.id)}
               />
             ))}
           </div>
