@@ -4,3 +4,16 @@ export type Response<T = any> = {
   data: T;
   error: string;
 };
+
+export type PaginationModel = {
+  page: number;
+  page_seize: number;
+  total: number;
+  keyword: string;
+  sort: string;
+};
+
+export type PaginationResponse<T = any> = {
+  list: T[];
+  total: number;
+};
