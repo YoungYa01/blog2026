@@ -16,3 +16,9 @@ export const deletePhoto = async (id: string) =>
 
 export const createPhoto = async (data: FormData) =>
   await http.post<Response<Photo>>("/api/v1/photos/upload", data);
+
+export const updatePhoto = async (id: string, data: FormData) =>
+  await http.put<Response<Photo>>(`/api/v1/photos/${id}`, data);
+
+export const likePhoto = async (id: string) =>
+  await http.get<Response<Photo>>(`/api/v1/photos/like/${id}`);

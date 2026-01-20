@@ -7,7 +7,7 @@ import AdminLayout from "@/layouts/adminLayout.tsx";
 import Auth from "@/components/auth";
 
 const DocsPage = lazy(() => import("@/pages/Docs/index.tsx"));
-const PricingPage = lazy(() => import("@/pages/Pricing/index.tsx"));
+const AlbumPage = lazy(() => import("@/pages/Album/index.tsx"));
 const BlogPage = lazy(() => import("@/pages/Blog/index.tsx"));
 const AboutPage = lazy(() => import("@/pages/About/index.tsx"));
 const DashboardPage = lazy(() => import("@/pages/Admin/index.tsx"));
@@ -40,8 +40,8 @@ export const routes: RouteObject[] = [
         element: <DocsPage />,
       },
       {
-        path: "pricing",
-        element: <PricingPage />,
+        path: "album",
+        element: <AlbumPage />,
       },
       {
         path: "blog",
