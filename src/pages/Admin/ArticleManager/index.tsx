@@ -498,6 +498,7 @@ const ArticleManager = () => {
       const isNew = !articleData.uuid;
 
       if (isNew) {
+          articleData.created_at = new Date().toISOString();
         await createArticle(articleData);
       } else {
         await updateArticle(articleData.uuid, articleData);
@@ -593,7 +594,6 @@ const ArticleManager = () => {
                 article={article}
                 onClick={() => handleCardClick(article.uuid)}
                 onDelete={(e) => {
-                  // console.log(e.target.stopPropagation);
                   handleDelete(e, article.uuid!);
                 }}
               />
