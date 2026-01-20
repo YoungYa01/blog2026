@@ -426,10 +426,10 @@ export const AlbumManager = () => {
 
     try {
       // 传入 page
-      const data = (await getPhotoList({
+      const { data } = await getPhotoList({
         page,
         page_size: 12,
-      })) as unknown as PaginationResponse<Photo>;
+      });
 
       const list = data.list || [];
 
