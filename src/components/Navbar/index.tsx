@@ -60,7 +60,6 @@ export const Navbar = () => {
 
     const messageHandler = (event: MessageEvent) => {
       if (event.data === CHANNEL_RECEIVE_KEY) {
-        console.log("收到 Admin 页面存活信号");
         isAdminAlive = true;
         closeAll();
         addToast({

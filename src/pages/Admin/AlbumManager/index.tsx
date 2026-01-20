@@ -20,7 +20,12 @@ import { Image } from "@heroui/image";
 import { addToast } from "@heroui/toast";
 
 import { Photo } from "@/types/models/photo.ts";
-import { createPhoto, deletePhoto, getPhotoList } from "@/api/photo.ts";
+import {
+  createPhoto,
+  deletePhoto,
+  getPhotoList,
+  updatePhoto,
+} from "@/api/photo.ts";
 import { PaginationResponse } from "@/types/models/response.ts";
 
 // --- 组件：图片卡片 ---
@@ -211,15 +216,12 @@ const PhotoEditorModal = ({
     }
 
     try {
-      console.log(formData);
-      console.log(onSubmit);
       await onSubmit(formData);
       if (interval) clearInterval(interval);
       setUploadProgress(100);
       setTimeout(onClose, 500);
     } catch (e) {
       console.error(e);
-      // 错误提示已在父组件处理
     } finally {
       if (interval) clearInterval(interval);
       setIsSubmitting(false);
@@ -481,28 +483,26 @@ export const AlbumManager = () => {
   };
 
   const handlePhotoClick = (photo: Photo) => {
-    console.log("handlePhotoClick", photo);
     setEditingPhoto({ ...photo, isNew: false });
     setIsEditorOpen(true);
   };
 
   // --- 交互: 提交表单 (上传) ---
   const handleSubmit = async (draftData: Photo | DraftPhoto) => {
-    console.log("handleSubmit", draftData);
+    // @ts-ignore
+    const draft: DraftPhoto = draftData;
+
+    const formData = new FormData();
+
+    // @ts-ignore
+    formData.append("file", draft.file);
+    formData.append("title", draft.title || "");
+    formData.append("story", draft.story || "");
+    formData.append("location", draft.location || "");
+    formData.append("tags", JSON.stringify(draft.tags || []));
+
     if ((draftData as DraftPhoto).isNew) {
-      // @ts-ignore
-      const draft: DraftPhoto = draftData;
-
       if (!draft.file) return;
-
-      const formData = new FormData();
-
-      formData.append("file", draft.file);
-      formData.append("title", draft.title || "");
-      formData.append("story", draft.story || "");
-      formData.append("location", draft.location || "");
-      formData.append("tags", JSON.stringify(draft.tags || []));
-
       const { success, message, data } = await createPhoto(formData);
 
       if (!success) {
@@ -514,8 +514,23 @@ export const AlbumManager = () => {
       setPhotos((prev) => [data, ...prev]);
       addToast({ title: "Upload Success", color: "success" });
     } else {
-      // 暂时只实现了上传，更新逻辑可根据需要扩展
-      console.log("Update not implemented yet");
+      formData.append("uid", String(draftData.id));
+      const { success, message } = await updatePhoto(
+        String(draftData.id),
+        formData,
+      );
+
+      if (success) {
+        // @ts-ignore
+        setPhotos((prev) =>
+          prev.map((p) => (p.id === draftData.id ? draftData : p)),
+        );
+        addToast({ title: "Update Success", color: "success" });
+        setEditingPhoto(null);
+        setIsEditorOpen(false);
+      } else {
+        addToast({ title: message, color: "danger" });
+      }
     }
   };
 

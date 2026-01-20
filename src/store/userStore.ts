@@ -30,8 +30,6 @@ export const useUserStore = create<UserState>((set) => ({
       // 2. 有 Token，发起请求
       const res = await getUserInfo();
 
-      console.log("res is: ", res);
-
       // 假设接口返回结构是 { data: UserModel, ... }
       set({ user: res.data, loading: false });
     } catch (error) {
