@@ -26,7 +26,6 @@ import {
   getPhotoList,
   updatePhoto,
 } from "@/api/photo.ts";
-import { PaginationResponse } from "@/types/models/response.ts";
 
 // --- 组件：图片卡片 ---
 const PhotoCard = ({
