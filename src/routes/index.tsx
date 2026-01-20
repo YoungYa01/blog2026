@@ -23,6 +23,7 @@ const ProfileManager = lazy(
 const CategoryManager = lazy(
   () => import("@/pages/Admin/CategoryManager/index.tsx"),
 );
+const TagManager = lazy(() => import("@/pages/Admin/TagManager/index.tsx"));
 
 // 定义路由表
 export const routes: RouteObject[] = [
@@ -87,11 +88,11 @@ export const routes: RouteObject[] = [
       },
       {
         path: "tag",
-        element: <h1>标签</h1>,
+        element: <TagManager />,
       },
       {
         path: "category",
-        element: <CategoryManager/>,
+        element: <CategoryManager />,
       },
       {
         path: "album",
