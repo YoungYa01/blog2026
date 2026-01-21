@@ -65,10 +65,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="text-center mt-8 text-xs text-gray-300">
-        技术支持：Next.js
-      </div>
-
       <BottomNav />
     </div>
   );
