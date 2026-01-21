@@ -5,6 +5,7 @@ import HomePage from "@/pages/Home";
 import DefaultLayout from "@/layouts/default.tsx";
 import AdminLayout from "@/layouts/adminLayout.tsx";
 import Auth from "@/components/auth";
+import IDPhotoChangePage from "@/pages/IDPhotoChange";
 
 const DocsPage = lazy(() => import("@/pages/Docs/index.tsx"));
 const AlbumPage = lazy(() => import("@/pages/Album/index.tsx"));
@@ -24,6 +25,10 @@ const CategoryManager = lazy(
   () => import("@/pages/Admin/CategoryManager/index.tsx"),
 );
 const TagManager = lazy(() => import("@/pages/Admin/TagManager/index.tsx"));
+
+const HistoryPage = lazy(() => import("@/pages/IDPhotoChange/history"));
+const MakePage = lazy(() => import("@/pages/IDPhotoChange/make"));
+const ProfilePage = lazy(() => import("@/pages/IDPhotoChange/profile"));
 
 // 定义路由表
 export const routes: RouteObject[] = [
@@ -109,6 +114,27 @@ export const routes: RouteObject[] = [
       {
         path: "*",
         element: <Navigate to="/admin/dashboard" />,
+      },
+    ],
+  },
+  {
+    path: "/idphoto",
+    children: [
+      {
+        path: "home",
+        element: <IDPhotoChangePage />,
+      },
+      {
+        path: "history",
+        element: <HistoryPage />,
+      },
+      {
+        path: "make",
+        element: <MakePage />,
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
       },
     ],
   },
