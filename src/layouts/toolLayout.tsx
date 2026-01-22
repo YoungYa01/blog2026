@@ -10,8 +10,8 @@ export default function ToolLayout() {
   };
 
   return (
-    <div className="relative">
-      <div className={"absolute left-16 top-4 z-[999]"}>
+    <div className="relative w-full h-full">
+      <div className={"absolute left-16 top-4 z-[9999]"}>
         <Tooltip content="返回上一页" showArrow={true}>
           <Button isIconOnly variant={"light"} onPress={handleBack}>
             <ArrowLeft />
