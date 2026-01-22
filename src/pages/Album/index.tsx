@@ -360,7 +360,7 @@ export default function BlogAlbumPage() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-24">
         {/* Header */}
-        <div className="mb-16 text-center">
+        <div className="hidden mb-16 text-center">
           <motion.div
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-xs font-mono mb-4"

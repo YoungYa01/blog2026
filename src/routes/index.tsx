@@ -136,6 +136,10 @@ export const routes: RouteObject[] = [
         path: "profile",
         element: <ProfilePage />,
       },
+      {
+        path: "*",
+        element: <Navigate to="/idphoto/home" />,
+      },
     ],
   },
   {

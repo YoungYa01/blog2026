@@ -401,7 +401,7 @@ export default function BlogArticlePage() {
   return (
     <div
       ref={containerRef}
-      className="min-h-screen bg-[#050505] text-foreground relative overflow-hidden font-sans"
+      className="min-h-screen  text-foreground relative overflow-hidden font-sans"
     >
       {/* 顶部进度条 */}
       <motion.div
@@ -417,7 +417,7 @@ export default function BlogArticlePage() {
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4">
         {/* Header */}
-        <div className="sticky top-0 z-40 py-6 bg-[#050505]/80 backdrop-blur-xl border-b border-white/5 mb-12 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="hidden sticky top-0 z-40 py-6 bg-[#050505]/80 backdrop-blur-xl border-b border-white/5 mb-12 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex flex-col">
             <div className="flex items-center gap-2 text-cyan-500 text-xs font-mono tracking-widest mb-1">
               <Cpu className="animate-spin-slow" size={14} />

@@ -5,6 +5,7 @@ import {
   Shield,
   ChevronRight,
   FileText,
+  DownloadIcon,
 } from "lucide-react";
 
 import BottomNav from "../BottomNav";
@@ -15,7 +16,14 @@ export default function ProfilePage() {
     { icon: HelpCircle, label: "常见问题", desc: "如何拍出好看的照片" },
     { icon: Shield, label: "隐私协议", desc: "" },
     { icon: Settings, label: "设置", desc: "版本 v1.0.0" },
+    { icon: DownloadIcon, label: "下载源码", desc: "" },
   ];
+
+  const handleClick = (label: string) => {
+    if (label === "下载源码") {
+      window.open("/IDPhotoChange.7z");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -46,6 +54,7 @@ export default function ProfilePage() {
                     ? "border-b border-gray-100"
                     : ""
                 }`}
+                onClick={() => handleClick(item.label)}
               >
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-gray-100 rounded-lg text-gray-600">
