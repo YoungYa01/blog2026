@@ -1,31 +1,50 @@
-import { Link } from "@heroui/link";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import clsx from "clsx";
 
 import { Navbar } from "@/components/Navbar/index.tsx";
 import CleanStarfall from "@/components/CleanStarfall";
 
 export default function DefaultLayout() {
+  const location = useLocation();
+  const fullscreenRoutes = ["/excalidraw", "/xmind"];
+  console.log(location);
+
   return (
     <div className="dark relative flex flex-col h-screen">
       <Navbar />
 
       <CleanStarfall />
 
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
+      <main
+        className={clsx(
+          `container mx-auto px-6 flex-grow`,
+            fullscreenRoutes.includes(location.pathname)
+            ? "max-w-full pb-6"
+            : "max-w-7xl pt-16",
+        )}
+      >
         <Outlet />
       </main>
-      <footer className="w-full flex items-center justify-center py-3">
-        <Link
-          isExternal
-          className="flex items-center gap-1 text-current"
-          href="https://heroui.com"
-          title="heroui.com homepage"
-        >
-          <span className="text-default-600">
-            Copyright © 2023. All rights reserved.Powered by
+      <footer
+        className={clsx(
+          "w-full flex items-center justify-center flex-col py-3",
+            fullscreenRoutes.includes(location.pathname) ? "hidden" : "",
+        )}
+      >
+        <div className={"flex text-center text-sm text-gray-500 gap-2"}>
+          <span>
+            Copyright © 2023-${new Date().getFullYear()} YoungYa{" "}
+            <span id="update_time" />
           </span>
-          <p className="text-primary">YoungYa</p>
-        </Link>
+          <br />
+          <span className={"text-blue-400"}>
+            <a href="https://beian.miit.gov.cn/"> 蜀ICP备2023021028号-2 </a>
+          </span>
+        </div>
+        <div className={"text-xs text-gray-500"}>
+          {"Last Update at " +
+            new Date(window.document.lastModified).toLocaleString()}
+        </div>
       </footer>
     </div>
   );

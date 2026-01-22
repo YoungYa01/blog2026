@@ -17,6 +17,10 @@ export const siteConfig = {
       href: "/album",
     },
     {
+      label: "Tool",
+      href: "/tools",
+    },
+    {
       label: "About",
       href: "/about",
     },
