@@ -2,10 +2,12 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import MagneticButton from "../MagneticButton/index.tsx";
 
 import Logo from "@/components/Logo";
+import Typewriter from "@/components/Typewriter";
 
 /**
  * 英雄区域组件
@@ -16,6 +18,7 @@ import Logo from "@/components/Logo";
  */
 const Hero = () => {
   const container = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useGSAP(
     () => {
@@ -57,19 +60,20 @@ const Hero = () => {
   return (
     <section
       ref={container}
-      className="relative h-[66vh] flex flex-row items-center justify-around z-10"
+      className="w-full relative h-[66vh] flex flex-row items-center justify-around z-10"
     >
-      <div className="text-center ml-20">
+      <div className="text-center ml-20 flex-1/2">
         {/* 遮罩容器 1 */}
         <div className="overflow-hidden mb-2">
           <h1 className="reveal-text text-[6vw] leading-[0.8] font-black text-white tracking-tighter mix-blend-difference">
-            Welcome
+            <Typewriter text={`$:hi~`}/>
           </h1>
         </div>
 
         <div className="hero-btn mt-12">
           <MagneticButton className="px-8 py-3 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white hover:bg-white hover:text-black transition-colors duration-300 flex items-center gap-2 group">
-            <span>EXPLORE</span>
+            {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */}
+            <div onClick={() => navigate("/docs")}>EXPLORE</div>
             <ArrowRight
               className="group-hover:translate-x-1 transition-transform"
               size={18}
@@ -78,7 +82,7 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className="flex justify-center items-center reveal-text mr-20">
+      <div className="flex justify-center items-center reveal-text mr-20 flex-1/2">
         <Logo />
       </div>
     </section>

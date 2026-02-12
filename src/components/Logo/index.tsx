@@ -20,7 +20,7 @@ const HandwrittenLogo = () => {
   };
 
   return (
-    <div className="w-full flex justify-center items-center">
+    <div className="w-1/2 flex justify-center items-center">
       <motion.svg
         animate="visible"
         className="w-full max-w-[500px] h-auto overflow-visible"

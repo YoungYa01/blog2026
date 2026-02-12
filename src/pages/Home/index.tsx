@@ -1,4 +1,3 @@
-import HorizontalScroll from "@/components/HorizontalScroll/index.tsx";
 import Hero from "@/components/Hero/index";
 
 /**
@@ -8,7 +7,7 @@ export default function HomePage() {
   return (
     <main>
       <Hero />
-      <HorizontalScroll />
+      {/*<HorizontalScroll />*/}
     </main>
   );
 }

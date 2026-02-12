@@ -29,7 +29,7 @@ const CleanStarfall = () => {
     // 粒子配置
     const INITIAL_STAR_COUNT = 50; // 初始星星数量
     const MAX_STARS = 200; // 最大星星数量
-    const SHOOTING_STAR_CHANCE = 0.2; // 流星概率
+    const SHOOTING_STAR_CHANCE = 0.4; // 流星概率
     const NEW_STAR_INTERVAL = 200; // 每200毫秒生成一个新星星
 
     // 星星类定义
@@ -53,7 +53,7 @@ const CleanStarfall = () => {
         this.x = Math.random() * width;
         this.y = randomY ? Math.random() * height : -10;
         this.z = Math.random() * 1.5 + 0.5; // 深度
-        this.size = Math.random() * 1.2;
+        this.size = Math.random() * 1.5;
         this.isShooting = isShooting;
         this.speed = this.isShooting
           ? Math.random() * 3 + 2

@@ -6,6 +6,7 @@ import { Progress } from "@heroui/progress";
 import { Terminal, Cpu, Code2, Globe, Braces, Laptop } from "lucide-react";
 import { Code } from "@heroui/code";
 
+import avatarImage from "@/asset/avatar.jpg";
 import Typewriter from "@/components/Typewriter";
 
 // --- 组件：技能芯片 ---
@@ -71,7 +72,7 @@ export default function AboutPage() {
                 isBordered
                 className="w-32 h-32 md:w-40 md:h-40"
                 color="primary"
-                src="https://avatars.githubusercontent.com/u/118104940?s=400&u=9709c934d4246f4fde369cb70d71bbff5d8d1baa&v=4"
+                src={avatarImage}
               />
             </div>
             {/* 在线状态点 */}

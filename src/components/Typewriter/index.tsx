@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
+import clsx from "clsx";
 
 type Props = {
   text: string;
   delay?: number;
   wait?: number;
+  className?: string;
 };
 
 const Typewriter: React.FC<Props> = ({
   text,
   delay = 100,
   wait = 2000, // 打完字后停留的时间 (毫秒)
-}: {
-  text: string;
-  delay?: number;
-  wait?: number;
+  className = "",
 }) => {
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -48,7 +47,7 @@ const Typewriter: React.FC<Props> = ({
   }, [currentIndex, delay, isDeleting, text, wait]);
 
   return (
-    <span className="font-mono text-default-300">
+    <span className={clsx("font-mono", className)}>
       {currentText}
       <span className="animate-pulse text-cyan-500">_</span>
     </span>
