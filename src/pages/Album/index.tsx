@@ -358,7 +358,7 @@ export default function BlogAlbumPage() {
       {/* Background Noise */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] z-0" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pb-24">
         {/* Header */}
         <div className="hidden mb-16 text-center">
           <motion.div
