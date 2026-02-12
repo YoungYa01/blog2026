@@ -10,7 +10,7 @@ export default function DefaultLayout() {
 
   return (
     <BackgroundBeamsWithCollision className={"bg-black"}>
-      <div className="dark relative flex flex-col h-screen">
+      <div className="dark relative flex flex-col min-h-screen">
         <Navbar />
 
         <main
