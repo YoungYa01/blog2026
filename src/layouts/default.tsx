@@ -31,7 +31,7 @@ export default function DefaultLayout() {
         >
           <div className={"flex text-center text-gray-500 gap-2"}>
             <span>
-              Copyright © 2023-${new Date().getFullYear()} YoungYa{" "}
+              Copyright © 2023-{new Date().getFullYear()} <a href="/album">YoungYa</a>{" "}
               <span id="update_time" />
             </span>
             <br />

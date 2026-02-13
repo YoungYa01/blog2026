@@ -12,10 +12,10 @@ export const siteConfig = {
       label: "Docs",
       href: "/docs",
     },
-    {
-      label: "Album",
-      href: "/album",
-    },
+    // {
+    //   label: "Album",
+    //   href: "/album",
+    // },
     {
       label: "Tool",
       href: "/tools",
