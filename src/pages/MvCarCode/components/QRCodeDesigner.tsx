@@ -8,7 +8,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
-  useDisclosure,
+  useDisclosure, useDraggable,
 } from "@heroui/modal";
 import { Image } from "@heroui/image";
 
@@ -29,8 +29,9 @@ const QRCodeDesigner: React.FC = () => {
   const [qrImage, setQRImage] = useState<string>("");
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState<string>("");
-
+  const targetRef = React.useRef(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { moveProps } = useDraggable({ targetRef, isDisabled: !isOpen });
 
   const generateQRCode = async (data: string) => {
     const qrDataURL = await QRCode.toDataURL(data, {
@@ -85,10 +86,8 @@ const QRCodeDesigner: React.FC = () => {
     formData.append("size", Math.round(qrStyle.size * convRatio));
 
     const response = await createCustomQRCode(formData);
-    const blob = new Blob([response], { type: "image/png" });
-    const tmpURL = URL.createObjectURL(blob);
 
-    setPreview(tmpURL);
+    setPreview(import.meta.env["VITE_BASE_URL"] + response.data);
     onOpen();
   };
 
@@ -198,11 +197,16 @@ const QRCodeDesigner: React.FC = () => {
           保存并生成
         </Button>
       </div>
-      <Modal isOpen={isOpen} placement={"center"} onOpenChange={onOpenChange}>
+      <Modal
+        ref={targetRef}
+        isOpen={isOpen}
+        placement={"center"}
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className={"flex justify-center"}>
+              <ModalHeader {...moveProps} className={"flex justify-center"}>
                 效果图
               </ModalHeader>
               <ModalBody className="text-center w-full">

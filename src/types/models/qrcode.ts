@@ -4,3 +4,5 @@ export type QRCodeReq = {
   y: number;
   size: number;
 };
+
+export type QRCodeResp = string
