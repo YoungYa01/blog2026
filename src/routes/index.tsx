@@ -6,6 +6,7 @@ import DefaultLayout from "@/layouts/default.tsx";
 import ToolsRouter from "@/routes/tools.tsx";
 import AdminRouter from "@/routes/admin.tsx";
 import IDPhotoRouter from "@/routes/idphoto.tsx";
+import MvCarCode from "@/routes/mv-car-code.tsx";
 
 const DocsPage = lazy(() => import("@/pages/Docs/index.tsx"));
 const AlbumPage = lazy(() => import("@/pages/Album/index.tsx"));
@@ -53,6 +54,7 @@ export const routes: RouteObject[] = [
   AdminRouter,
   IDPhotoRouter,
   ToolsRouter,
+  MvCarCode,
   {
     path: "*",
     element: <Navigate to="/" />,

@@ -63,13 +63,13 @@ const Register = () => {
 
     setIsSendingCode(true);
     try {
-      const { success, error, message } = await sendCaptchaEmail({
+      const { success, message } = await sendCaptchaEmail({
         email: formData.email,
       });
 
       if (!success) {
         addToast({
-          description: message || error,
+          description: message,
           color: "danger",
         });
 
