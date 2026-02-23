@@ -1,9 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Rnd } from "react-rnd";
 import QRCode from "qrcode";
-import { addToast } from "@heroui/toast";
 import { Button } from "@heroui/button";
 import { MoveDiagonal2 } from "lucide-react";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  useDisclosure,
+} from "@heroui/modal";
+import { Image } from "@heroui/image";
 
 import defaultBgi from "@/asset/default.png";
 import { createCustomQRCode } from "@/api/qrcode.ts";
@@ -21,6 +28,9 @@ const QRCodeDesigner: React.FC = () => {
   });
   const [qrImage, setQRImage] = useState<string>("");
   const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState<string>("");
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const generateQRCode = async (data: string) => {
     const qrDataURL = await QRCode.toDataURL(data, {
@@ -75,11 +85,11 @@ const QRCodeDesigner: React.FC = () => {
     formData.append("size", Math.round(qrStyle.size * convRatio));
 
     const response = await createCustomQRCode(formData);
+    const blob = new Blob([response], { type: "image/png" });
+    const tmpURL = URL.createObjectURL(blob);
 
-    addToast({
-      title: response.success ? "成功" : "失败",
-      description: response.message,
-    });
+    setPreview(tmpURL);
+    onOpen();
   };
 
   const handleImageLoad = () => {
@@ -109,84 +119,100 @@ const QRCodeDesigner: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ padding: "20px", maxWidth: "500px", margin: "0 auto" }}>
-      <div
-        ref={containerRef}
-        style={{
-          position: "relative",
-          width: "100%",
-          touchAction: "none",
-          border: "1px solid #ccc",
-        }}
-      >
-        <img
-          ref={bgImgRef} // 💡 绑定 ref 到背景图上
-          alt="Background"
-          src={bgImage}
-          style={{ width: "100%", display: "block", pointerEvents: "none" }}
-          onLoad={handleImageLoad}
-        />
-
-        <Rnd
-          lockAspectRatio
-          bounds="parent"
-          className={
-            "flex justify-center align-center p-3 bg-contain bg-no-repeat bg-center"
-          }
-          minWidth={100}
-          position={{ x: qrStyle.x, y: qrStyle.y }}
-          resizeHandleComponent={{
-            bottomRight: (
-              <MoveDiagonal2
-                className={
-                  "bg-white rounded-full -translate-x-0.5 -translate-y-0.5"
-                }
-                height={20}
-                width={20}
-              />
-            ),
-          }}
-          size={{ width: qrStyle.size, height: qrStyle.size }}
+    <>
+      <div style={{ padding: "20px", maxWidth: "500px", margin: "0 auto" }}>
+        <div
+          ref={containerRef}
           style={{
-            border: "2px dashed #1890ff",
-            backgroundColor: "rgba(24, 144, 255, 0.2)",
-            backgroundImage: `url(${qrImage})`,
-          }}
-          onDragStop={(_, d) => {
-            setQrStyle((prev) => ({ ...prev, x: d.x, y: d.y }));
-          }}
-          onResizeStop={(_, __, ref, ___, position) => {
-            setQrStyle({
-              size: parseInt(ref.style.width, 10),
-              ...position,
-            });
-          }}
-        />
-      </div>
-
-      <div style={{ marginBottom: "15px" }}>
-        <input
-          ref={inputRef}
-          accept="image/*"
-          className="hidden"
-          type="file"
-          onChange={handleImageUpload}
-        />
-        <Button
-          className={"w-full mt-4"}
-          color={"primary"}
-          onPress={() => {
-            if (inputRef) inputRef.current?.click();
+            position: "relative",
+            width: "100%",
+            touchAction: "none",
+            border: "1px solid #ccc",
           }}
         >
-          自定义图片
+          <img
+            ref={bgImgRef} // 💡 绑定 ref 到背景图上
+            alt="Background"
+            src={bgImage}
+            style={{ width: "100%", display: "block", pointerEvents: "none" }}
+            onLoad={handleImageLoad}
+          />
+
+          <Rnd
+            lockAspectRatio
+            bounds="parent"
+            className={
+              "flex justify-center align-center p-3 bg-contain bg-no-repeat bg-center"
+            }
+            minWidth={100}
+            position={{ x: qrStyle.x, y: qrStyle.y }}
+            resizeHandleComponent={{
+              bottomRight: (
+                <MoveDiagonal2
+                  className={
+                    "bg-white rounded-full -translate-x-0.5 -translate-y-0.5"
+                  }
+                  height={20}
+                  width={20}
+                />
+              ),
+            }}
+            size={{ width: qrStyle.size, height: qrStyle.size }}
+            style={{
+              border: "2px dashed #1890ff",
+              backgroundColor: "rgba(24, 144, 255, 0.2)",
+              backgroundImage: `url(${qrImage})`,
+            }}
+            onDragStop={(_, d) => {
+              setQrStyle((prev) => ({ ...prev, x: d.x, y: d.y }));
+            }}
+            onResizeStop={(_, __, ref, ___, position) => {
+              setQrStyle({
+                size: parseInt(ref.style.width, 10),
+                ...position,
+              });
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "15px" }}>
+          <input
+            ref={inputRef}
+            accept="image/*"
+            className="hidden"
+            type="file"
+            onChange={handleImageUpload}
+          />
+          <Button
+            className={"w-full mt-4"}
+            color={"primary"}
+            onPress={() => {
+              if (inputRef) inputRef.current?.click();
+            }}
+          >
+            自定义图片
+          </Button>
+        </div>
+
+        <Button className={"w-full"} color={"success"} onPress={handleSave}>
+          保存并生成
         </Button>
       </div>
-
-      <Button className={"w-full"} color={"success"} onPress={handleSave}>
-        保存并生成
-      </Button>
-    </div>
+      <Modal isOpen={isOpen} placement={"center"} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className={"flex justify-center"}>
+                效果图
+              </ModalHeader>
+              <ModalBody className="text-center w-full">
+                <Image isBlurred alt="" className="w-full mb-6" src={preview} />
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 

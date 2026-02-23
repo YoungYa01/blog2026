@@ -1,5 +1,6 @@
-import { http } from "@/api/request.ts";
-import { Response } from "@/types/models/response.ts";
+import { request } from "@/api/request.ts";
 
 export const createCustomQRCode = (data: FormData) =>
-  http.post<Response>("/api/v1/public/qr-image", data);
+  request.post<FormData, Blob>("/api/v1/public/qr-image", data, {
+    responseType: "blob",
+  });

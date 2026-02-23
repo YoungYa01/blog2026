@@ -51,4 +51,4 @@ const http = {
   },
 };
 
-export { http };
+export { http, request };
