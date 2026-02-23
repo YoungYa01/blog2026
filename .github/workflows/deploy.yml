@@ -1,4 +1,4 @@
-name: Deploy Rspress Site
+name: Deploy YoungYa's Blog Web Site
 
 on:
   push:
