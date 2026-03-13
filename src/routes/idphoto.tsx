@@ -11,23 +11,23 @@ export default {
   path: "/idphoto",
   children: [
     {
-      path: "home",
+      path: "/idphoto/home",
       element: <IDPhotoChangePage />,
     },
     {
-      path: "history",
+      path: "/idphoto/history",
       element: <HistoryPage />,
     },
     {
-      path: "make",
+      path: "/idphoto/make",
       element: <MakePage />,
     },
     {
-      path: "profile",
+      path: "/idphoto/profile",
       element: <ProfilePage />,
     },
     {
-      path: "*",
+      path: "/idphoto/",
       element: <Navigate to="/idphoto/home" />,
     },
   ],
