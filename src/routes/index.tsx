@@ -7,6 +7,8 @@ import ToolsRouter from "@/routes/tools.tsx";
 import AdminRouter from "@/routes/admin.tsx";
 import IDPhotoRouter from "@/routes/idphoto.tsx";
 import MvCarCode from "@/routes/mv-car-code.tsx";
+import TestPage from "@/pages/Test/index.tsx";
+import CollegeNoticePage from "@/pages/CollegeNotice/index.tsx";
 
 const DocsPage = lazy(() => import("@/pages/Docs/index.tsx"));
 const AlbumPage = lazy(() => import("@/pages/Album/index.tsx"));
@@ -35,6 +37,14 @@ export const routes: RouteObject[] = [
       {
         path: "about",
         element: <AboutPage />,
+      },
+      {
+        path: "test",
+        element: <TestPage />,
+      },
+      {
+        path: "college-notice",
+        element: <CollegeNoticePage />,
       },
     ],
   },

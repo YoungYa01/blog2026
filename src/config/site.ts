@@ -21,6 +21,10 @@ export const siteConfig = {
       href: "/tools",
     },
     {
+      label: "School Notice",
+      href: "/college-notice",
+    },
+    {
       label: "About",
       href: "/about",
     },
