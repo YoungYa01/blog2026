@@ -230,7 +230,7 @@ const CollegeNotice: React.FC = () => {
               <NoticeCard
                 key={card.title}
                 delay={card.delay}
-                fetchApi={card.fetchApi}
+                fetchApi={card.fetchApi as (page: number) => Promise<NoticeResponse>}
                 icon={card.icon}
                 title={card.title}
               />
