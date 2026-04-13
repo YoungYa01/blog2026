@@ -9,6 +9,9 @@ import {
   Loader2,
   BellOff,
   ChevronLeft,
+  Captions,
+  University,
+  Handshake,
 } from "lucide-react";
 
 // API 接口导入
@@ -16,6 +19,9 @@ import {
   getCollegeNotice,
   getAcademicNotice,
   getGraduateNotice,
+  getPublicNotice,
+  getAnnouncementNotice,
+  getDJNotice,
 } from "@/api/collegeNotice";
 
 interface NoticeItem {
@@ -191,10 +197,28 @@ const CollegeNotice: React.FC = () => {
       delay: 0.2,
     },
     {
-      title: "研究生通知",
+      title: "党建通知",
+      icon: <Handshake className="w-5 h-5 text-red-600" />,
+      fetchApi: getDJNotice,
+      delay: 0.3,
+    },
+    {
+      title: "研究生公告",
       icon: <GraduationCap className="w-5 h-5 text-purple-500" />,
       fetchApi: getGraduateNotice,
-      delay: 0.3,
+      delay: 0.4,
+    },
+    {
+      title: "学生公告",
+      icon: <Captions className="w-5 h-5 text-yellow-500" />,
+      fetchApi: getAnnouncementNotice,
+      delay: 0.5,
+    },
+    {
+      title: "公示公告",
+      icon: <University className="w-5 h-5 text-gray-500" />,
+      fetchApi: getPublicNotice,
+      delay: 0.6,
     },
   ];
 
@@ -210,10 +234,10 @@ const CollegeNotice: React.FC = () => {
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-3 text-foreground">
             School of Computer and Artificial Intelligence,{" "}
             <a
+              className="text-secondary-500 border-b-1"
               href="https://www.swjtu.edu.cn/"
               rel="noreferrer"
               target="_blank"
-              className="text-secondary-500 border-b-1"
             >
               SWJTU
             </a>
@@ -230,7 +254,9 @@ const CollegeNotice: React.FC = () => {
               <NoticeCard
                 key={card.title}
                 delay={card.delay}
-                fetchApi={card.fetchApi as (page: number) => Promise<NoticeResponse>}
+                fetchApi={
+                  card.fetchApi as (page: number) => Promise<NoticeResponse>
+                }
                 icon={card.icon}
                 title={card.title}
               />
