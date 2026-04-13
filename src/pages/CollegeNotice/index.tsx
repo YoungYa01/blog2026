@@ -27,6 +27,7 @@ import {
 interface NoticeItem {
   title: string;
   link: string;
+  date?: string;
 }
 
 interface NoticeResponse {
@@ -101,21 +102,44 @@ const NoticeCard: React.FC<NoticeCardProps> = ({
       <div className="flex flex-col gap-1">
         {notices.map((notice, index) => (
           <motion.a
-            key={`${page}-${index}`} // 切换页码时强制重新触发动画
+            key={`${page}-${index}`}
             animate={{ opacity: 1, x: 0 }}
-            className="group relative flex items-start gap-3 p-3 rounded-xl hover:bg-default-100 dark:hover:bg-default-50 transition-all active:scale-[0.98]"
+            className="group relative flex flex-col gap-1 p-3 rounded-xl hover:bg-default-100 dark:hover:bg-default-50 transition-all active:scale-[0.98]"
             href={notice.link}
             initial={{ opacity: 0, x: -10 }}
             rel="noopener noreferrer"
             target="_blank"
             transition={{ duration: 0.2, delay: index * 0.03 }}
           >
-            <span className="mt-0.5 text-default-300 group-hover:text-primary transition-colors shrink-0">
-              <ChevronRight className="w-4 h-4" />
-            </span>
-            <h3 className="text-sm md:text-base font-medium text-foreground/80 group-hover:text-primary transition-colors line-clamp-2 leading-relaxed">
-              {notice.title}
-            </h3>
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 text-default-300 group-hover:text-primary transition-colors shrink-0">
+                <ChevronRight className="w-4 h-4" />
+              </span>
+              <h3 className="text-sm md:text-base font-medium text-foreground/80 group-hover:text-primary transition-colors line-clamp-2 leading-relaxed flex-grow">
+                {notice.date ? (
+                  <span className="text-[11px] font-mono text-gray-50 px-1.5 py-0.5 rounded border border-gray-50">
+                  {notice.date}
+                </span>
+              ) : (
+                  <span className="text-[10px] font-bold text-danger-500 bg-danger-50 px-1.5 py-0.5 rounded border border-danger-100">
+                  置顶
+                </span>
+              )} {"  "} {notice.title}
+              </h3>
+            </div>
+
+            {/* 🔥 2. 增加日期显示区域 */}
+            {/*<div className="pl-7 flex items-center gap-2">*/}
+            {/*  {notice.date ? (*/}
+            {/*    <span className="text-[11px] font-mono text-default-400 px-1.5 py-0.5 rounded">*/}
+            {/*      {notice.date}*/}
+            {/*    </span>*/}
+            {/*  ) : (*/}
+            {/*    <span className="text-[10px] font-bold text-danger-500 bg-danger-50 px-1.5 py-0.5 rounded border border-danger-100">*/}
+            {/*      置顶*/}
+            {/*    </span>*/}
+            {/*  )}*/}
+            {/*</div>*/}
           </motion.a>
         ))}
       </div>
