@@ -7,6 +7,7 @@ import ToolsRouter from "@/routes/tools.tsx";
 import AdminRouter from "@/routes/admin.tsx";
 import IDPhotoRouter from "@/routes/idphoto.tsx";
 import MvCarCode from "@/routes/mv-car-code.tsx";
+import Meeting from "@/routes/meeting.tsx";
 import TestPage from "@/pages/Test/index.tsx";
 import CollegeNoticePage from "@/pages/CollegeNotice/index.tsx";
 
@@ -65,6 +66,7 @@ export const routes: RouteObject[] = [
   IDPhotoRouter,
   ToolsRouter,
   MvCarCode,
+  Meeting,
   {
     path: "*",
     element: <Navigate to="/" />,
