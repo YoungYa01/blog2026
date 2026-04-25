@@ -20,7 +20,7 @@ export function getWsBase() {
 }
 
 export async function createRoom(title: string, creatorId: string) {
-  const res = await fetch(`${API_BASE}/api/rooms`, {
+  const res = await fetch(`${API_BASE}/api/v1/rooms`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export async function createRoom(title: string, creatorId: string) {
 
 export async function getRoom(roomId: string, token: string) {
   const res = await fetch(
-    `${API_BASE}/api/rooms/${roomId}?token=${encodeURIComponent(token)}`,
+    `${API_BASE}/api/v1/rooms/${roomId}?token=${encodeURIComponent(token)}`,
   );
 
   if (!res.ok) {
@@ -52,7 +52,7 @@ export async function saveMinutes(
   content: string,
   userId: string,
 ) {
-  const res = await fetch(`${API_BASE}/api/rooms/${roomId}/minutes`, {
+  const res = await fetch(`${API_BASE}/api/v1/rooms/${roomId}/minutes`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -68,7 +68,7 @@ export async function saveMinutes(
 }
 
 export async function getMinutes(roomId: string) {
-  const res = await fetch(`${API_BASE}/api/rooms/${roomId}/minutes`);
+  const res = await fetch(`${API_BASE}/api/v1/rooms/${roomId}/minutes`);
 
   if (!res.ok) {
     throw new Error("获取会议纪要失败");
@@ -89,7 +89,7 @@ export async function uploadRecordingChunk(
   form.append("index", String(index));
   form.append("chunk", blob, `${String(index).padStart(6, "0")}.part`);
 
-  const res = await fetch(`${API_BASE}/api/rooms/${roomId}/recordings/chunks`, {
+  const res = await fetch(`${API_BASE}/api/v1/rooms/${roomId}/recordings/chunks`, {
     method: "POST",
     body: form,
   });
@@ -108,7 +108,7 @@ export async function completeRecording(
   mimeType: string,
 ) {
   const res = await fetch(
-    `${API_BASE}/api/rooms/${roomId}/recordings/complete`,
+    `${API_BASE}/api/v1/rooms/${roomId}/recordings/complete`,
     {
       method: "POST",
       headers: {
