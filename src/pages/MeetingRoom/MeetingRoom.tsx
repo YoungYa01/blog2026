@@ -717,7 +717,7 @@ export default function MeetingRoom() {
     const wsBase = getWsBase();
 
     const url =
-      `${wsBase}/rooms/ws/rooms/${roomId}` +
+      `${wsBase}/ws/rooms/${roomId}` +
       `?token=${encodeURIComponent(token)}` +
       `&userId=${encodeURIComponent(userIdRef.current)}` +
       `&name=${encodeURIComponent(nameRef.current)}`;
