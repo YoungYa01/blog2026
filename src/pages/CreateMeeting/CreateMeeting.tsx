@@ -45,7 +45,7 @@ export default function Home() {
               color={"success"}
               onPress={() => (window.location.href = inviteLink)}
             >
-              打开
+              进入会议
             </Button>
             <Button onPress={() => navigator.clipboard.writeText(inviteLink)}>
               复制

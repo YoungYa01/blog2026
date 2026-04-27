@@ -25,6 +25,10 @@ export const siteConfig = {
       href: "/college-notice",
     },
     {
+      label: "Meeting",
+      href: "/meeting",
+    },
+    {
       label: "About",
       href: "/about",
     },
