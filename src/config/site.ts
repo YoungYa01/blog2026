@@ -29,6 +29,10 @@ export const siteConfig = {
       href: "/meeting",
     },
     {
+      label: "Proxy",
+      href: "/proxy",
+    },
+    {
       label: "About",
       href: "/about",
     },

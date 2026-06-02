@@ -16,6 +16,7 @@ const AlbumPage = lazy(() => import("@/pages/Album/index.tsx"));
 const AboutPage = lazy(() => import("@/pages/About/index.tsx"));
 const Login = lazy(() => import("@/pages/Auth/Login/index.tsx"));
 const Register = lazy(() => import("@/pages/Auth/Register/index.tsx"));
+const ProxyPage = lazy(() => import("@/pages/ProxyPage/ProxyPage.tsx"));
 
 // 定义路由表
 export const routes: RouteObject[] = [
@@ -46,6 +47,10 @@ export const routes: RouteObject[] = [
       {
         path: "college-notice",
         element: <CollegeNoticePage />,
+      },
+      {
+        path: "proxy",
+        element: <ProxyPage />,
       },
     ],
   },
